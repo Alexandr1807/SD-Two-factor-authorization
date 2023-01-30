@@ -1,6 +1,6 @@
 <?php
 
-function fn_generate_code($user_id) {
+function fn_generate_verification_code($user_id) {
     $str = '0123456789abcdefghijklmnopqrstuvwxyz';
     $update_data = [
         'verify_code' => substr(str_shuffle($str), 0, 6),

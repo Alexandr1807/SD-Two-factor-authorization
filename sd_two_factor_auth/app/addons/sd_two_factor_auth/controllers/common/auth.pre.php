@@ -161,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 && fn_user_password_verify((int)$user_data['user_id'], $password, (string)$user_data['password'], (string)$salt)
             ) {
                 $_REQUEST['redirect_url'] = fn_url('auth.verify_account');
-                fn_generate_code($user_data['user_id']);
+                fn_generate_verification_code($user_data['user_id']);
                 fn_set_session_data('key', $user_data);
                 return array(CONTROLLER_STATUS_REDIRECT, $redirect_url);
             }
@@ -320,7 +320,7 @@ if ($mode == 'login_form') {
     if (defined('AJAX_REQUEST')) {
         fn_send_verification_code($user_email);
         $count = $params['count'];
-        
+
         Registry::get('view')->assign('count', $count);
         Registry::get('view')->display('addons\sd_two_factor_auth\views\auth\verify_account.tpl');
         if ($count == 0) {
