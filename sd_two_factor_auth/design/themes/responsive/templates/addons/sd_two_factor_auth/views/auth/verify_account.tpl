@@ -2,9 +2,7 @@
 
 {capture name="login"}
     <form id="delete_verify_code" name="{$id}_form" action="{""|fn_url}" method="post" {if $style == "popup"}class="cm-ajax cm-ajax-full-render"{/if}>
-
         <input type="hidden" name="result_ids" value="send_new_code" />
-
         <input type="hidden" name="return_url" value="{$smarty.request.return_url|default:$config.current_url}" />
         <input type="hidden" name="redirect_url" value="{$redirect_url|default:$config.current_url}" />
 
@@ -18,13 +16,12 @@
             <input type="text" id="verify_{$id}" name="verify_code" size="30" value="{if $stored_user_login}{$stored_user_login}{else}{$config.demo_username}{/if}" class="ty-login__input cm-focus" />
         </div>
 
-
         {include file="common/image_verification.tpl" option="login" align="left"}
         <div id="send_new_code">
             {hook name="index:login_buttons"}
                 <div class="buttons-container clearfix">
                     <div class="ty-float-left">
-                        <a id="my_button" class="ty-btn ty-btn__secondary">{__("sd_two_factor_auth.send_code_again")}</a>
+                        <a id="resend-email-btn" class="ty-btn ty-btn__secondary">{__("sd_two_factor_auth.send_code_again")}</a>
                     </div>
                     <div class="ty-float-right">
                         {include file="buttons/login.tpl" but_name="dispatch[auth.verify_account]" but_role="submit"}
@@ -35,8 +32,8 @@
             <div class="ty-float-left">
                 <span>{__("sd_two_factor_auth.resend_code_text")}</span> {if isset($count)}{$count}{else}3{/if}
             </div>
-            <!--send_new_code--></div>
-        <!--delete_verify_code--></form>
+        <!--send_new_code--></div>
+    <!--delete_verify_code--></form>
 {/capture}
 
 <div class="ty-login">

@@ -1,6 +1,6 @@
 <?php
 
-function generate_code($user_id) {
+function fn_generate_code($user_id) {
     $str = '0123456789abcdefghijklmnopqrstuvwxyz';
     $update_data = [
         'verify_code' => substr(str_shuffle($str), 0, 6),
@@ -9,7 +9,7 @@ function generate_code($user_id) {
     return $update_data['verify_code'];
 }
 
-function get_user_data($user_id) {
+function fn_get_user_data($user_id) {
     $user_data = db_get_row("SELECT * FROM ?:users WHERE user_id = ?i", $user_id);
     return $user_data;
 }

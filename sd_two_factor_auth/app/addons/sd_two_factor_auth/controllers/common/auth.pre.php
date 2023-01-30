@@ -15,7 +15,6 @@
 use Tygh\Development;
 use Tygh\Registry;
 use Tygh\Helpdesk;
-use Tygh\Tools\Url;
 
 if (!defined('BOOTSTRAP')) { die('Access denied'); }
 
@@ -28,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $redirect_url = '';
         fn_restore_processed_user_password($_REQUEST, $_POST);
         list($status, $user_data, $user_login, $password, $salt) = fn_auth_routines($_REQUEST, $auth);
-
 
         if (!empty($_REQUEST['redirect_url'])) {
             $redirect_url = $_REQUEST['redirect_url'];
@@ -163,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 && fn_user_password_verify((int)$user_data['user_id'], $password, (string)$user_data['password'], (string)$salt)
             ) {
                 $_REQUEST['redirect_url'] = fn_url('auth.verify_account');
-                generate_code($user_data['user_id']);
+                fn_generate_code($user_data['user_id']);
                 fn_set_session_data('key', $user_data);
                 return array(CONTROLLER_STATUS_REDIRECT, $redirect_url);
             }
@@ -173,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($mode === 'verify_account') {
         $verification_code = $_REQUEST['verify_code'];
-        $user_data = get_user_data($_SESSION['settings']['key']['value']['user_id']);
+        $user_data = fn_get_user_data($_SESSION['settings']['key']['value']['user_id']);
         $verification_code_from_db = $user_data['verify_code'];
         if ($verification_code_from_db === $verification_code) {
             // Regenerate session ID for security reasons
@@ -218,7 +216,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     fn_set_hook('set_admin_notification', $user_data);
                 }
-
             }
 
             if (!empty($_REQUEST['remember_me'])) {
@@ -282,7 +279,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             return [CONTROLLER_STATUS_REDIRECT, $redirect_url];
         }
-
     }
 }
 
@@ -324,8 +320,7 @@ if ($mode == 'login_form') {
     if (defined('AJAX_REQUEST')) {
         fn_send_verification_code($user_email);
         $count = $params['count'];
-
-
+        
         Registry::get('view')->assign('count', $count);
         Registry::get('view')->display('addons\sd_two_factor_auth\views\auth\verify_account.tpl');
         if ($count == 0) {
