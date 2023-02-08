@@ -1,1 +1,0 @@
-{$company_data.company_name nofilter}: {$email_subj}
