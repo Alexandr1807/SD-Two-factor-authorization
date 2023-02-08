@@ -1,1 +1,0 @@
-{$company_data.company_name nofilter}: {__("addons.rus_payments.invoice_payment")}
